@@ -14,7 +14,7 @@ import {
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { format } from "date-fns";
-interface IBillingForm {
+export interface IBillingForm {
   subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
 }
 const BillingForm = ({ subscriptionPlan }: IBillingForm) => {
