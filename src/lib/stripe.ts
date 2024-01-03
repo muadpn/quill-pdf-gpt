@@ -12,7 +12,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY! ?? "", {
 export async function getUserSubscriptionPlan() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-  //   if (!user) throw new TRPCError({ code: "UNAUTHORIZED" });
+
 
   if (!user || !user.id) {
     return {

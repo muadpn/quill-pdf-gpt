@@ -174,7 +174,6 @@ export const appRouter = router({
         userId: userId,
       },
     });
-    console.log(stripeSession);
 
     return {
       url: stripeSession.url,
