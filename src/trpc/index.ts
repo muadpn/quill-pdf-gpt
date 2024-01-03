@@ -6,6 +6,10 @@ import { db } from "../db";
 import { string, z } from "zod";
 import { $Enums } from "@prisma/client";
 import { INFINITE_QUERY_LIMIT } from "@/config/infinite-query";
+import { absoluteUrl } from "@/lib/utils";
+import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
+import Stripe from "stripe";
+import { PLANS } from "@/config/stripe";
 export const appRouter = router({
   authcallback: publicProcedure.query(async () => {
     const { getUser } = getKindeServerSession();
@@ -30,7 +34,7 @@ export const appRouter = router({
   }),
   getUserFiles: privateProcedure.query(async ({ ctx }) => {
     const { user, userId } = ctx;
-    console.log(userId);
+
     const data = await db.file.findMany({
       where: {
         userId: userId,
@@ -129,6 +133,53 @@ export const appRouter = router({
         nextCursor,
       };
     }),
+  createStripeSession: privateProcedure.mutation(async ({ ctx }) => {
+    console.log("first");
+    const { userId } = ctx;
+
+    const billingUrl = absoluteUrl("/dashboard/billing");
+    if (!userId) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+    const dbUser = await db.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+    const subscriptionPlan = await getUserSubscriptionPlan();
+    if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
+      const stripeSession = await stripe.billingPortal.sessions.create({
+        customer: dbUser.id,
+        return_url: billingUrl,
+      });
+      console.log(stripeSession);
+      return {
+        url: stripeSession.url,
+      };
+    }
+    const stripeSession = await stripe.checkout.sessions.create({
+      success_url: billingUrl,
+      cancel_url: billingUrl,
+      payment_method_types: ["card"],
+      mode: "subscription",
+      billing_address_collection: "required",
+      line_items: [
+        {
+          price: PLANS.find((p) => p.name === "Pro")?.price.priceIds.test,
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId: userId,
+      },
+    });
+    console.log(stripeSession);
+
+    return {
+      url: stripeSession.url,
+    };
+  }),
 });
 
 // Export type router type signature,
