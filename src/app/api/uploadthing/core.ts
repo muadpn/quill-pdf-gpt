@@ -110,6 +110,9 @@ export const ourFileRouter = {
 
   freePlanUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(middleware)
+    .onUploadError(({ error }) => {
+      console.log(error);
+    })
     .onUploadComplete(onUploadComplete),
   proPlanUploader: f({ pdf: { maxFileSize: "16MB" } })
     .middleware(middleware)

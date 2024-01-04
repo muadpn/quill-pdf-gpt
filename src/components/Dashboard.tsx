@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import UploadButton from "./UploadButton";
 import { trpc } from "@/app/_trpc/client";
 import {
+  File,
   GhostIcon,
   Loader2,
   MessageSquare,
@@ -27,6 +28,7 @@ const Dashboard = ({ subscriptionPlan }: IDashboard) => {
   >(null);
   const utils = trpc.useUtils();
   const { data: files, isLoading } = trpc.getUserFiles.useQuery();
+  // const { data: totalMessage } = trpc.getFileMessages.useQuery({fileId:})
   const { mutate: deleteFile } = trpc.deleteFiles.useMutation({
     onSuccess: () => {
       utils.getUserFiles.invalidate();
@@ -62,7 +64,9 @@ const Dashboard = ({ subscriptionPlan }: IDashboard) => {
                     href={`/dashboard/${file.id}`}
                   >
                     <div className="pt-6 px-6 flex w-full items-center justify-between space-x-6 ">
-                      <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-accent-foreground to-accent"></div>
+                      <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-bl  from-accent via-background to-primary flex items-center justify-center">
+                        <File className="w-5 h-5"/>
+                      </div>
                       <div className="flex-1 truncate">
                         <div className="flex items-center space-x-3">
                           <h3 className="truncate text-lg font-medium ">
@@ -77,8 +81,9 @@ const Dashboard = ({ subscriptionPlan }: IDashboard) => {
                       <Plus className="h-4 w-4" />{" "}
                       {format(new Date(file.createdAt), "MMM yyyy")}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MessageSquare className="h-4 w-4" /> Mocked
+                    <div className="flex  items-center gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      <p className="capitalize">{file.uploadStatus.toLocaleLowerCase()}</p>
                     </div>
                     <Button
                       onClick={() => deleteFile({ id: file.id })}

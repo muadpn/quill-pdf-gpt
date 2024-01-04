@@ -1,5 +1,6 @@
 import { PLANS } from "./stripe";
-
+export const MAX_KB_FREE = 40_00_000
+export const MAX_KB_PRO = 16_00_000
 export const pricingItems = [
   {
     plan: "Free",

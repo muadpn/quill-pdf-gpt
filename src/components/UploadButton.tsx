@@ -5,14 +5,16 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import Dropzone from "react-dropzone";
 import React from "react";
-import { CloudIcon, File, Loader2 } from "lucide-react";
+import { CloudIcon, File, Gem, Loader2 } from "lucide-react";
 import { Progress } from "./ui/progress";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "./ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { MAX_KB_FREE, MAX_KB_PRO } from "@/config/pricing-tooltip-consts";
 const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
-  const { toast } = useToast();
+  const { toast: HotToast } = useToast();
   const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -43,31 +45,54 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
     <Dropzone
       multiple={false}
       onDrop={async (acceptedFiles) => {
+        if (isSubscribed && acceptedFiles[0].size > MAX_KB_PRO) {
+          return toast.error("File is Too Large to upload", {
+            description:
+              "Please Select files lower than 16M or Split the PDF if that works.",
+          });
+        }
+        if (!isSubscribed && acceptedFiles[0].size > MAX_KB_FREE) {
+          return toast("Allowed Size is 4MB", {
+            description: "Please Select files lower than 4MB or Upgrade now!",
+
+            action: {
+              label: "Upgrade",
+              onClick: () => router.push("/pricing"),
+            },
+          });
+        }
+
         setIsUploading(true);
         const progressInterval = startSimulatedProgress();
 
         //handle file uploading..
-        const res = await startUpload(acceptedFiles);
-        if (!res) {
-          return toast({
-            title: "Something went wrong",
-            description: "Error uploading pdf, Please try again later!",
-            variant: "destructive",
-          });
-        }
-        const [fileResponse] = res;
-        const key = fileResponse?.key;
-        if (!key) {
-          return toast({
-            title: "Something went wrong",
-            description: "Error uploading pdf, Please try again later!",
-            variant: "destructive",
-          });
-        }
+        try {
+          const res = await startUpload(acceptedFiles);
 
-        clearInterval(progressInterval);
-        setUploadProgress(100);
-        startPolling({ key });
+          if (!res) {
+            console.log(res);
+            return HotToast({
+              title: "Something went wrong",
+              description: "Error uploading pdf, Please try again later!",
+              variant: "destructive",
+            });
+          }
+          const [fileResponse] = res;
+          const key = fileResponse?.key;
+          if (!key) {
+            return HotToast({
+              title: "Something went wrong",
+              description: "Error uploading pdf, Please try again later!",
+              variant: "destructive",
+            });
+          }
+
+          clearInterval(progressInterval);
+          setUploadProgress(100);
+          startPolling({ key });
+        } catch (error) {
+          console.log(error);
+        }
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (

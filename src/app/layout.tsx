@@ -7,7 +7,8 @@ import Providers from "@/components/Providers";
 import "react-loading-skeleton/dist/skeleton.css";
 const inter = Inter({ subsets: ["latin"] });
 import 'simplebar-react/dist/simplebar.min.css'
-import { Toaster } from "@/components/ui/toaster"
+// import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 export const metadata = constructMetadata()
 
 export default function RootLayout({
