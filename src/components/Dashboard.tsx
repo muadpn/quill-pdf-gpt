@@ -17,27 +17,30 @@ import { Skeleton } from "@/components/ui/skeleton";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import Link from "next/link";
 import { format } from "date-fns";
-const Dashboard = () => {
+import { getUserSubscriptionPlan } from "@/lib/stripe";
+interface IDashboard {
+  subscriptionPlan: Awaited<ReturnType<typeof getUserSubscriptionPlan>>;
+}
+const Dashboard = ({ subscriptionPlan }: IDashboard) => {
   const [currentlyDeletingFile, setCurrentlyDeletingFile] = useState<
     string | null
   >(null);
   const utils = trpc.useUtils();
   const { data: files, isLoading } = trpc.getUserFiles.useQuery();
-  const { mutate: deleteFile, isLoading: DeletingFile } =
-    trpc.deleteFiles.useMutation({
-      onSuccess: () => {
-        utils.getUserFiles.invalidate();
-      },
-      onMutate: ({ id }) => setCurrentlyDeletingFile(id),
-      onSettled: () => setCurrentlyDeletingFile(null),
-    });
+  const { mutate: deleteFile } = trpc.deleteFiles.useMutation({
+    onSuccess: () => {
+      utils.getUserFiles.invalidate();
+    },
+    onMutate: ({ id }) => setCurrentlyDeletingFile(id),
+    onSettled: () => setCurrentlyDeletingFile(null),
+  });
 
   return (
     <main className="mx-auto max-w-7xl md:p-10 px-2">
       <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-border pb-5 sm:flex-row  sm:items-center sm:gap-0">
         <h1 className="mb-3 font-bold text-5xl text-foreground">My Files</h1>
         {/* <Button>Upload file</Button> */}
-        <UploadButton />
+        <UploadButton isSubscribed={subscriptionPlan.isSubscribed} />
       </div>
       {/* Display All User Files */}
       {files && files.length > 0 ? (
@@ -75,7 +78,7 @@ const Dashboard = () => {
                       {format(new Date(file.createdAt), "MMM yyyy")}
                     </div>
                     <div className="flex items-center gap-2">
-                      <MessageSquare className="h-4 w-4" /> Mocked 
+                      <MessageSquare className="h-4 w-4" /> Mocked
                     </div>
                     <Button
                       onClick={() => deleteFile({ id: file.id })}
