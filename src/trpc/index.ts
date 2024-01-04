@@ -10,6 +10,9 @@ import { absoluteUrl } from "@/lib/utils";
 import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 import { PLANS } from "@/config/stripe";
+import { UTApi } from "uploadthing/server";
+export const utapi = new UTApi();
+
 export const appRouter = router({
   authcallback: publicProcedure.query(async () => {
     const { getUser } = getKindeServerSession();
@@ -47,18 +50,27 @@ export const appRouter = router({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
-      const file = db.file.findFirst({
+      const file = await db.file.findFirst({
         where: {
           id: input.id,
           userId,
         },
       });
+
       if (!file) new TRPCError({ code: "NOT_FOUND" });
-      await db.file.delete({
-        where: {
-          id: input.id,
-        },
-      });
+      const deleteDbFile = async () => {
+        await db.file.delete({
+          where: {
+            id: input.id,
+          },
+        });
+      };
+      const deleteUTfile = async () => {
+        if (file) {
+          await utapi.deleteFiles(file?.key);
+        }
+      };
+      await Promise.all([deleteDbFile, deleteUTfile]);
       return file;
     }),
   getFile: privateProcedure
