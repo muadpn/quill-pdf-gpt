@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import Dropzone from "react-dropzone";
 import React from "react";
-import { CloudIcon, File, Loader2, XOctagon } from "lucide-react";
+import { CloudIcon, File, Loader2 } from "lucide-react";
 import { Progress } from "./ui/progress";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "./ui/use-toast";

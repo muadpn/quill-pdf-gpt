@@ -50,7 +50,7 @@ const Messages = ({ fileId }: Imessage) => {
     }
   }, [entry, fetchNextPage]);
   return (
-    <div className="flex max-h-[calc(100vh-3.5rem-7rem)] border-zinc-200 flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto scrollbar-thumb scrollbar-thumb-rounded scrollbar-track-lighter  scrollbar-w-2 scrolling-touch">
+    <div className="flex min-h-[calc(100vh-3.5rem-10rem)] border-zinc-200 flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto scrollbar-thumb scrollbar-thumb-rounded scrollbar-track-lighter  scrollbar-w-2 scrolling-touch">
       {combinedMessages && combinedMessages.length > 0 ? (
         combinedMessages.map((msg, i) => {
           const isNextMessageSamePerson =
@@ -68,7 +68,6 @@ const Messages = ({ fileId }: Imessage) => {
           }
           return (
             <Message
-              // ref={ref}
               isNextMessageSamePerson={isNextMessageSamePerson}
               message={msg}
               key={msg.id}

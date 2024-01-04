@@ -52,7 +52,7 @@ export const ourFileRouter = {
 
         await db.file.update({
           data: {
-            uploadStatus: "SUCESS",
+            uploadStatus: "SUCCESS",
           },
           where: {
             id: createdFile.id,

@@ -9,6 +9,9 @@ import {
 import { ArrowRight } from "lucide-react";
 import UserAccountNav from "./UserAccountNav";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
+import ClientComponent from "./ClientComponent";
+import MobileNav from "./MobileNav";
+// import MobileNav from "./Footer";
 
 interface INavBar {}
 const Navbar = async () => {
@@ -24,7 +27,8 @@ const Navbar = async () => {
             {" "}
             Quill.
           </Link>
-          {/* Todo: Add mobile Navbar */}
+          {/* <ClientComponent /> */}
+          <MobileNav isAuth={user?.id ? true : false} />
           <div className="hidden items-center space-x-4 sm:flex">
             {!user?.id ? (
               <>
@@ -79,7 +83,6 @@ const Navbar = async () => {
             )}
           </div>
         </div>
-        {/* <h1>helo</h1> */}
       </MaxWidthWrapper>
     </nav>
   );

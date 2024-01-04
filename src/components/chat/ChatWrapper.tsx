@@ -18,10 +18,10 @@ const ChatWrapper = ({ fileId }: IChatWrapper) => {
     },
     {
       refetchInterval: (data) =>
-        data === "FAILED" || data === "SUCESS" ? false : 500,
+        data === "FAILED" || data === "SUCCESS" ? false : 500,
     }
   );
-  // console.log(data);
+
   if (isLoading)
     return (
       <div className="relative min-h-full divide-y divide-border  justify-between gap-2">

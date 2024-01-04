@@ -36,9 +36,12 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import PdfFullScreen from "./PdfFullScreen";
 
 const errorPDf = () => (
-  <div className="flex-1 w-full p-5">
-    <h1 className="text-3xl text-destructive ">Something went wrong!</h1>
-    <p className="mt-4 text-xl  ">Posible ways to fix</p>
+  <div className="flex-1  w-full p-5">
+    <h1 className="text-3xl text-destructive ">
+      Something went wrong while loading PDF!
+    </h1>
+    <h3 className="text-xl">But you can still Chat with the PDF!</h3>
+    <p className="mt-4 text-xl  ">Posible ways to fix PDF Preview</p>
     <ul className="list-disc list-outside text-mutedforeground  px-6">
       <li className="text-lg text-muted-foreground">
         Try Enabling JavaScript on browser.

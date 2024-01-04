@@ -63,8 +63,8 @@ const BillingForm = ({ subscriptionPlan }: IBillingForm) => {
               <p className="rounded-full text-xs font-medium">
                 {subscriptionPlan.isCanceled
                   ? "Your plan will be canceled on "
-                  : "Your plan renewed on"}
-                {format(subscriptionPlan.stripeCurrentPeriodEnd!, "dd.mm.yyyy")}
+                  : "Your plan renewed on "}
+                {format(subscriptionPlan.stripeCurrentPeriodEnd!, "dd/MM/yyyy")}
                 .
               </p>
             ) : null}

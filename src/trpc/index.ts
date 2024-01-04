@@ -134,7 +134,6 @@ export const appRouter = router({
       };
     }),
   createStripeSession: privateProcedure.mutation(async ({ ctx }) => {
-    console.log("first");
     const { userId } = ctx;
 
     const billingUrl = absoluteUrl("/dashboard/billing");
@@ -149,14 +148,17 @@ export const appRouter = router({
 
     const subscriptionPlan = await getUserSubscriptionPlan();
     if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
-      const stripeSession = await stripe.billingPortal.sessions.create({
-        customer: dbUser.id,
-        return_url: billingUrl,
-      });
-      console.log(stripeSession);
-      return {
-        url: stripeSession.url,
-      };
+      try {
+        const stripeSession = await stripe.billingPortal.sessions.create({
+          customer: dbUser.id,
+          return_url: billingUrl,
+        });
+        return {
+          url: stripeSession.url,
+        };
+      } catch (error) {
+        console.log(error);
+      }
     }
     const stripeSession = await stripe.checkout.sessions.create({
       success_url: billingUrl,
