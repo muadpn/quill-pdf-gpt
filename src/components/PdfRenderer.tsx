@@ -36,33 +36,33 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import PdfFullScreen from "./PdfFullScreen";
 
 const errorPDf = () => (
-  <div className="flex-1  w-full p-5">
+  <div className="flex-1 min-h-full w-full px-2.5 py-5 md:p-5">
     <h1 className="text-3xl text-destructive ">
       Something went wrong while loading PDF!
     </h1>
     <h3 className="text-xl">But you can still Chat with the PDF!</h3>
     <p className="mt-4 text-xl  ">Posible ways to fix PDF Preview</p>
-    <ul className="list-disc list-outside text-mutedforeground  px-6">
-      <li className="text-lg text-muted-foreground">
+    <ul className="list-disc list-outside text-mutedforeground  px-2.5 md:px-6">
+      <li className="text-sm md:text-lg text-muted-foreground">
         Try Enabling JavaScript on browser.
       </li>
-      <li className="text-lg text-muted-foreground">
+      <li className="text-sm md:text-lg text-muted-foreground">
         Disable Ad-blocker&apos;s
       </li>
-      <li className="text-lg text-muted-foreground">
+      <li className="text-sm md:text-lg text-muted-foreground">
         Disable or Delete unwanted extension&apos;s
       </li>
-      <li className="text-lg text-muted-foreground">
+      <li className="text-sm md:text-lg text-muted-foreground">
         Try diffrent browser&apos;s, [Chrome, Firefox Developer&apos;s]
         recommended
       </li>
-      <li className="text-lg text-muted-foreground">
+      <li className="text-sm md:text-lg text-muted-foreground">
         Make sure PDF that uploaded is validated.
       </li>
     </ul>
-    <p className="max-w-prose font-bold  flex gap-2">
+    <p className="max-w-prose font-bold text-xs md:text-sm flex gap-2">
       Note:
-      <span className="font-normal text-muted-foreground">
+      <span className="font-normal text-xs md:text-sm text-muted-foreground">
         Brave Browser Normally doesn&apos;t allow to fetch from external
         Sources. Try fixing brave settings.
       </span>
@@ -105,7 +105,7 @@ const PdfRenderer = ({ url }: IPdfRendererProps) => {
 
   return (
     <div className="w-full bg-primary-foreground rounded-md shadow flex flex-col items-center">
-      <div className="h-14 w-full border-b border-border flex items-center justify-between px-2">
+      <div className="py-2 flex-wrap justify-center w-full border-b border-border flex items-center sm:justify-between px-2">
         <div className="flex items-center gap-1.5">
           <Button
             onClick={() => {
@@ -149,7 +149,7 @@ const PdfRenderer = ({ url }: IPdfRendererProps) => {
             <ChevronUp className="h-4 w-4" />
           </Button>
         </div>
-        <div className="space-x-2">
+        <div className="flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
