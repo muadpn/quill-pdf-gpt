@@ -12,14 +12,16 @@ datasource db {
 }
 
 model User {
-  id                     String    @id @unique
-  email                  String    @unique
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  File                   File[]
-  Message                Message[]
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  id                       String    @id @unique //matches kinde user id
+  email                    String    @unique
+  guid                     String?   @unique
+  File                     File[]
+  stripeCurrentPeriodStart DateTime? @map(name: "stripe_current_period_start")
+  Message                  Message[]
+  stripeCustomerId         String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId     String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId            String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd   DateTime? @map(name: "stripe_current_period_end")
 }
 
 enum UploadStatus {
@@ -34,7 +36,6 @@ model File {
   name         String
   uploadStatus UploadStatus @default(PENDING)
   url          String
-  key          String
   messages     Message[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -50,9 +51,62 @@ model Message {
   isUserMessage Boolean
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  File          File?    @relation(fields: [fileId], references: [id])
+  fileId        String?
 
-  userId String?
-  fileId String?
-  User   User?   @relation(fields: [userId], references: [id])
-  File   File?   @relation(fields: [fileId], references: [id])
+  @@index([fileId])
+  @@index([userId])
+}
+
+model NewsLetter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?
+  FirstName String
+  LastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminConfig {
+  stripePriceId String @unique
+  name          String
+  slug          String
+  quota         Int
+  pagesPerPdf   Int
+}
+
+model Blog {
+  BlogId       String     @id @default(cuid())
+  BlogImage    BlogImage  @relation(fields: [blogImageId], references: [id], onDelete: Cascade)
+  author       String
+  TitleBegin   String
+  TitleColored String
+  TitleEnd     String
+  shortDes     String     @db.MediumText
+  blogSlug     String     @unique
+  banner       String?
+  content      String     @db.LongText()
+  blogStatus   BlogStatus
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  blogImageId  String
+
+  @@index([blogImageId])
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model BlogImage {
+  id        String   @id @default(cuid())
+  url       String
+  key       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Blog      Blog[]
 }

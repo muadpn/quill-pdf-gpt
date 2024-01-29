@@ -67,7 +67,7 @@ export const appRouter = router({
       };
       const deleteUTfile = async () => {
         if (file) {
-          await utapi.deleteFiles(file?.key);
+          await utapi.deleteFiles(file?.url);
         }
       };
       await Promise.all([deleteDbFile, deleteUTfile]);
@@ -79,7 +79,7 @@ export const appRouter = router({
       const { userId } = ctx;
       const file = await db.file.findFirst({
         where: {
-          key: input.key,
+          url: input.key,
           userId: userId,
         },
       });

@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
-// import fs from "fs";
 
 interface IPageProps {
   params: {
@@ -37,8 +36,7 @@ const page = async ({ params }: IPageProps) => {
             <PdfRenderer url={file.url} />
           </div>
         </div>
-
-        <div className="shrink-0  flex-[0.75] border-t border-border lg:w-96 lg:border-l lg:border-t-0 ">
+        <div className="shrink-0 max-h-screen flex-[0.75] border-t border-border lg:w-96 lg:border-l lg:border-t-0 ">
           <ChatWrapper fileId={file.id} />
         </div>
       </div>

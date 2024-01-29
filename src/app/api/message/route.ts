@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
     pineconeIndex: index,
     namespace: UserFile.id,
   });
+  
   const results = await vectorStore.similaritySearch(message, 4);
 
   const prevMessages = await db.message.findMany({
@@ -71,7 +72,7 @@ export async function POST(req: NextRequest) {
       },
       {
         role: "user",
-        content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \nIf you don't know the answer, just say that you don't know, don't try to make up an answer.
+        content: `Use the following pieces of context (or previous conversaton if needed) to answer the users question in markdown format. \n If you don't know the answer, just say that you don't know, don't try to make up an answer.
         
   \n----------------\n
   
