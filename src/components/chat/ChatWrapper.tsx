@@ -24,7 +24,7 @@ const ChatWrapper = ({ fileId }: IChatWrapper) => {
 
   if (isLoading)
     return (
-      <div className="relative min-h-full divide-y divide-border  justify-between gap-2">
+      <div className="relative min-h-full max-h-full  divide-y divide-border  justify-between gap-2">
         <div
           className="flex-1 flex justify-center flex-col mb-28
       "
@@ -42,7 +42,7 @@ const ChatWrapper = ({ fileId }: IChatWrapper) => {
     );
   if (data === "FAILED")
     return (
-      <div className="relative min-h-full flex divide-y divide-muted-foreground justify-between gap-2">
+      <div className="relative min-h-full max-h-full flex divide-y divide-muted-foreground justify-between gap-2">
         <div
           className="flex-1 flex justify-center flex-col mb-28
       "
@@ -78,7 +78,7 @@ const ChatWrapper = ({ fileId }: IChatWrapper) => {
 
   if (data === "PROCESSING")
     return (
-      <div className="relative min-h-full flex divide-y divide-muted-foreground justify-between gap-2">
+      <div className="relative min-h-full max-h-full flex divide-y divide-muted-foreground justify-between gap-2">
         <div
           className="flex-1 flex justify-center flex-col mb-28
       "
@@ -97,7 +97,7 @@ const ChatWrapper = ({ fileId }: IChatWrapper) => {
 
   return (
     <ChatContextProvider fileId={fileId}>
-      <div className="relative max-h-[calc(100vh)-7rem] divide-border flex flex-col justify-between gap-2 divide-y divide-x ">
+      <div className="relative max-h-[calc(100dvh)-7rem]  divide-border flex flex-col justify-between gap-2 divide-y divide-x ">
         <div className="flex-1 justify-between flex flex-col mb-28">
           <Messages fileId={fileId} />
         </div>

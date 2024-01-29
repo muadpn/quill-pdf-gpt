@@ -28,6 +28,9 @@ export function constructMetadata({
   return {
     title,
     description,
+    robots:{
+      
+    },
     openGraph: {
       title,
       description,
@@ -61,3 +64,21 @@ export function constructMetadata({
   };
 }
 // <meta name="msvalidate.01" content="B4D559C6149D163D09C3EFF70A541897" />
+// model Blog {
+//   BlogId    String @id @default(cuid())
+//   BannerImg String
+//   author    String
+//   title     String
+//   shortDes  String
+//   banner    String
+//   content   String     @db.Text()
+//   tags      Json
+//   draft     BlogStatus
+//   createdAt DateTime   @default(now())
+//   updatedAt DateTime   @updatedAt
+// }
+
+// enum BlogStatus {
+//   DRAFT
+//   PUBLISHED
+// }
